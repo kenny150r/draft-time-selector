@@ -30,6 +30,23 @@ export function latestByName(rows) {
   return [...map.values()];
 }
 
+export async function updateSlots(id, slotIds) {
+  const { error } = await supabase
+    .from('whua_draft_responses')
+    .update({ available_slot_ids: slotIds })
+    .eq('id', id);
+  if (error) throw error;
+}
+
+export async function deleteByName(name) {
+  const rows = await fetchResponses();
+  const key = name.trim().toLowerCase();
+  const ids = rows.filter((r) => String(r.display_name).trim().toLowerCase() === key).map((r) => r.id);
+  if (ids.length === 0) return;
+  const { error } = await supabase.from('whua_draft_responses').delete().in('id', ids);
+  if (error) throw error;
+}
+
 export function tally(rows) {
   const latest = latestByName(rows);
   const counts = Object.fromEntries(SLOTS.map((s) => [s.id, 0]));

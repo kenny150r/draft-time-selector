@@ -1,5 +1,5 @@
-import { HOURS, SLOT_IDS, SLOTS, TIMEZONE, WEEKS } from './config.js';
-import { fetchResponses, latestByName, saveResponse, tally } from './db.js';
+import { SLOT_IDS, SLOTS, TIMEZONE, WEEKS } from './config.js';
+import { deleteByName, fetchResponses, latestByName, saveResponse, tally, updateSlots } from './db.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 
@@ -11,7 +11,6 @@ function esc(s) {
     .replaceAll('"', '&quot;');
 }
 
-const quietAvail = new Set();
 let quietBound = false;
 
 export function wantsActualBoard() {
@@ -39,151 +38,172 @@ export function hideQuietBoard() {
   document.body.classList.remove('quiet-mode');
 }
 
+function validateName(name) {
+  const trimmed = name.trim();
+  if (trimmed.length < 2) return 'Put a name on the row.';
+  if (trimmed.length > 80) return 'That name is too long.';
+  if (/arizona|wildcat|uofa|u of a|bear\s*down/i.test(trimmed)) {
+    return 'That name is on the watchlist.';
+  }
+  if (/^(gary)$/i.test(trimmed) || (/\bgary\b/i.test(trimmed) && !/garrett/i.test(trimmed))) {
+    return 'He goes by Garrett.';
+  }
+  return '';
+}
+
 function bindQuietBoard() {
   if (quietBound) return;
   quietBound = true;
   const root = $('#quiet');
-  $('#quiet-name', root).addEventListener('change', () => preloadName());
-  $('#quiet-name', root).addEventListener('blur', () => preloadName());
-  $('#quiet-save', root).addEventListener('click', () => submitQuiet());
+  $('#quiet-add', root).addEventListener('click', () => addRow());
+  $('#quiet-new-name', root).addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addRow();
+    }
+  });
   $('#quiet-cursed', root).addEventListener('click', (e) => {
     e.preventDefault();
     location.replace(location.pathname);
   });
-  root.addEventListener('click', (e) => {
-    const btn = e.target.closest('button.qcell');
-    if (!btn) return;
-    const id = btn.dataset.slot;
-    if (!SLOT_IDS.has(id)) return;
-    if (quietAvail.has(id)) quietAvail.delete(id);
-    else quietAvail.add(id);
-    btn.classList.toggle('on', quietAvail.has(id));
-    $('#quiet-err', root).textContent = '';
-    $('#quiet-picked', root).textContent = `${quietAvail.size} selected`;
+  root.addEventListener('change', async (e) => {
+    const cb = e.target.closest('input[type="checkbox"][data-slot]');
+    if (!cb) return;
+    const tr = cb.closest('tr[data-id]');
+    if (!tr) return;
+    await saveRow(tr, cb);
   });
-}
-
-async function preloadName() {
-  const name = $('#quiet-name').value.trim().toLowerCase();
-  if (name.length < 2) return;
-  try {
-    const rows = await fetchResponses();
-    const mine = latestByName(rows).find((r) => String(r.display_name).trim().toLowerCase() === name);
-    quietAvail.clear();
-    if (mine) {
-      for (const id of mine.available_slot_ids || []) {
-        if (SLOT_IDS.has(id)) quietAvail.add(id);
-      }
+  root.addEventListener('click', async (e) => {
+    const del = e.target.closest('[data-delete-name]');
+    if (!del) return;
+    const name = del.dataset.deleteName;
+    const ok = window.confirm(`Delete ${name}'s row? This cannot be undone.`);
+    if (!ok) return;
+    try {
+      await deleteByName(name);
+      await refreshQuietBoard();
+    } catch (err) {
+      $('#quiet-err').textContent = `Delete failed: ${err.message || err}`;
     }
-    paintQuietCells();
-    $('#quiet-note').textContent = mine
-      ? `Loaded your last submission (${quietAvail.size} slots). Edit and save to replace it.`
-      : 'New name — tap every slot you can do, then save.';
-  } catch {
-    /* still usable offline-ish */
-  }
-}
-
-function paintQuietCells() {
-  document.querySelectorAll('#quiet button.qcell').forEach((btn) => {
-    btn.classList.toggle('on', quietAvail.has(btn.dataset.slot));
   });
-  $('#quiet-picked').textContent = `${quietAvail.size} selected`;
 }
 
-async function refreshQuietBoard() {
-  const grid = $('#quiet-grid');
-  let counts = Object.fromEntries(SLOTS.map((s) => [s.id, 0]));
-  let namesBySlot = Object.fromEntries(SLOTS.map((s) => [s.id, []]));
-  let max = 0;
-  let bestIds = new Set();
-  let bestLabels = [];
-  let people = 0;
+function slotsFromRow(tr) {
+  return [...tr.querySelectorAll('input[data-slot]:checked')]
+    .map((cb) => cb.dataset.slot)
+    .filter((id) => SLOT_IDS.has(id));
+}
+
+async function saveRow(tr, changedBox) {
+  const id = tr.dataset.id;
+  const prev = changedBox ? !changedBox.checked : null;
   try {
-    const tallied = tally(await fetchResponses());
-    counts = tallied.counts;
-    namesBySlot = tallied.namesBySlot;
-    max = tallied.max;
-    bestIds = tallied.bestIds;
-    bestLabels = tallied.bestLabels;
-    people = tallied.latest.length;
+    await updateSlots(id, slotsFromRow(tr));
+    paintTotals(tr.closest('table'));
+    $('#quiet-err').textContent = '';
   } catch (err) {
-    $('#quiet-err').textContent = `Could not load live counts (${err.message || err}). You can still mark times.`;
+    if (changedBox) changedBox.checked = prev;
+    $('#quiet-err').textContent = `Could not save: ${err.message || err}`;
   }
-
-  grid.innerHTML = WEEKS.map((week) => {
-    const rows = week.days
-      .map((day) => {
-        const cells = HOURS.map((h) => {
-          const id = `${day.date}T${h.key}`;
-          const n = counts[id] || 0;
-          const who = (namesBySlot[id] || []).join(', ') || 'nobody yet';
-          const heat = max ? 0.08 + 0.75 * (n / max) : 0.06;
-          const on = quietAvail.has(id) ? 'on' : '';
-          const best = bestIds.has(id) ? 'best' : '';
-          return `<td>
-            <button type="button" class="qcell ${on} ${best}" data-slot="${id}" title="${esc(who)}"
-              style="--heat:${heat}">
-              <span class="qlabel">${esc(h.label.replace(' PT', ''))}</span>
-              <span class="qcount">${n}</span>
-            </button>
-          </td>`;
-        }).join('');
-        return `<tr><th scope="row">${esc(day.short)}</th>${cells}</tr>`;
-      })
-      .join('');
-    return `<section class="qweek">
-      <h2>${esc(week.title)}</h2>
-      <table class="qtable">
-        <thead><tr><th></th><th>6:00 PM PT</th><th>7:00 PM PT</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </section>`;
-  }).join('');
-
-  $('#quiet-summary').innerHTML =
-    people === 0
-      ? 'Nobody has submitted yet. First pick is free real estate.'
-      : `Best overlap: <strong>${esc(bestLabels.join(' · ') || 'n/a')}</strong> · ${people} ${people === 1 ? 'person' : 'people'} in`;
-  paintQuietCells();
 }
 
-async function submitQuiet() {
-  const name = $('#quiet-name').value.trim();
-  const err = $('#quiet-err');
-  const note = $('#quiet-note');
-  err.textContent = '';
-  if (name.length < 2) {
-    err.textContent = 'Put your name on it.';
+async function addRow() {
+  const input = $('#quiet-new-name');
+  const name = input.value.trim();
+  const err = validateName(name);
+  if (err) {
+    $('#quiet-err').textContent = err;
     return;
   }
-  if (/arizona|wildcat|uofa|u of a|bear\s*down/i.test(name)) {
-    err.textContent = 'That name is on the watchlist. Try one that doesn’t sound like a booster.';
-    return;
-  }
-  if (/^(gary)$/i.test(name) || (/\bgary\b/i.test(name) && !/garrett/i.test(name))) {
-    err.textContent = 'He goes by Garrett.';
-    return;
-  }
-  if (quietAvail.size < 1) {
-    err.textContent = 'Tap at least one slot you can actually do.';
-    return;
-  }
-  const btn = $('#quiet-save');
-  btn.disabled = true;
   try {
+    const rows = latestByName(await fetchResponses());
+    if (rows.some((r) => String(r.display_name).trim().toLowerCase() === name.toLowerCase())) {
+      $('#quiet-err').textContent = `${name} is already on the board. Use that row.`;
+      return;
+    }
     await saveResponse({
       display_name: name.slice(0, 80),
-      available_slot_ids: [...quietAvail].filter((id) => SLOT_IDS.has(id)),
+      available_slot_ids: [],
       timezone: TIMEZONE,
       gauntlet_seconds: 0,
       rage_clicks: 0,
     });
-    note.textContent = 'Saved. Latest submission per name is what counts.';
+    input.value = '';
+    $('#quiet-err').textContent = '';
     await refreshQuietBoard();
   } catch (e) {
-    err.textContent = `Save failed: ${e.message || e}`;
-  } finally {
-    btn.disabled = false;
+    $('#quiet-err').textContent = `Could not add row: ${e.message || e}`;
+  }
+}
+
+function paintTotals(table) {
+  if (!table) return;
+  SLOTS.forEach((slot, i) => {
+    const n = table.querySelectorAll(`tbody input[data-slot="${slot.id}"]:checked`).length;
+    const cell = table.querySelector(`tfoot [data-total="${i}"]`);
+    if (cell) cell.textContent = String(n);
+  });
+}
+
+function headerHtml() {
+  const dayHeads = WEEKS.flatMap((week) =>
+    week.days.map((day) => `<th colspan="2" class="qday">${esc(day.short)}</th>`),
+  ).join('');
+  const hourHeads = SLOTS.map((s) => `<th class="qhour">${s.hour === 18 ? '6pm' : '7pm'}</th>`).join('');
+  return `<thead>
+    <tr>
+      <th class="qsticky qname-h" rowspan="2">Name</th>
+      ${dayHeads}
+      <th class="qdel-h" rowspan="2"></th>
+    </tr>
+    <tr>${hourHeads}</tr>
+  </thead>`;
+}
+
+function personRow(row) {
+  const have = new Set((row.available_slot_ids || []).filter((id) => SLOT_IDS.has(id)));
+  const boxes = SLOTS.map(
+    (s) =>
+      `<td><input type="checkbox" data-slot="${s.id}" ${have.has(s.id) ? 'checked' : ''} aria-label="${esc(`${row.display_name} ${s.label}`)}" /></td>`,
+  ).join('');
+  return `<tr data-id="${esc(row.id)}">
+    <th class="qsticky qname" scope="row">${esc(row.display_name)}</th>
+    ${boxes}
+    <td class="qdel"><button type="button" class="qdel-btn" data-delete-name="${esc(row.display_name)}">Delete</button></td>
+  </tr>`;
+}
+
+async function refreshQuietBoard() {
+  const wrap = $('#quiet-grid');
+  try {
+    const rows = await fetchResponses();
+    const people = latestByName(rows).sort((a, b) =>
+      String(a.display_name).localeCompare(String(b.display_name), undefined, { sensitivity: 'base' }),
+    );
+    const { max, bestLabels } = tally(rows);
+    const totals = SLOTS.map((_, i) => `<td data-total="${i}">0</td>`).join('');
+    const body = people.map(personRow).join('') || '';
+    wrap.innerHTML = `<div class="qscroll">
+      <table class="qsheet">
+        ${headerHtml()}
+        <tbody>${body}</tbody>
+        <tfoot>
+          <tr>
+            <th class="qsticky">Total</th>
+            ${totals}
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>`;
+    paintTotals(wrap.querySelector('table'));
+    $('#quiet-summary').innerHTML =
+      people.length === 0
+        ? 'Nobody on the board yet. Add a name below.'
+        : `${people.length} ${people.length === 1 ? 'person' : 'people'} · best overlap: <strong>${esc(bestLabels.join(' · ') || 'n/a')}</strong>${max ? ` (${max})` : ''}`;
+    $('#quiet-err').textContent = '';
+  } catch (err) {
+    wrap.innerHTML = '';
+    $('#quiet-err').textContent = `Could not load the board (${err.message || err}).`;
   }
 }

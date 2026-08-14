@@ -622,11 +622,15 @@ body.quiet-mode {
   z-index: 190;
   min-height: 100%;
   padding: 24px 16px 48px;
-  max-width: 720px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   color: #1a1a1a;
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   user-select: text;
+}
+
+.quiet-head {
+  max-width: 960px;
 }
 
 .quiet-head h1 {
@@ -643,91 +647,117 @@ body.quiet-mode {
   margin: 0 0 6px;
 }
 
-.quiet-name {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-weight: 600;
-  margin: 16px 0;
-}
-
-.quiet-name input {
-  font-size: 16px;
-  padding: 10px 12px;
-  border: 1px solid #bbb;
-  border-radius: 8px;
-}
-
-.quiet-note {
-  font-size: 0.9rem;
-  color: #444;
-  margin: 4px 0;
-}
-
 .quiet-err {
   color: #8c1d40;
   font-weight: 700;
   min-height: 1.2em;
 }
 
-.qweek {
-  margin: 20px 0;
+.qscroll {
+  overflow-x: auto;
+  margin: 16px 0;
+  border: 1px solid #ccc;
+  background: #fff;
 }
 
-.qweek h2 {
-  font-size: 1rem;
-  margin: 0 0 8px;
-}
-
-.qtable {
-  width: 100%;
+.qsheet {
   border-collapse: collapse;
+  font-size: 12px;
+  min-width: 100%;
 }
 
-.qtable th,
-.qtable td {
-  padding: 4px;
+.qsheet th,
+.qsheet td {
+  border: 1px solid #ddd;
+  padding: 4px 6px;
   text-align: center;
-}
-
-.qtable th[scope='row'] {
-  text-align: left;
   white-space: nowrap;
-  padding-right: 10px;
-  font-size: 0.9rem;
 }
 
-.qcell {
-  width: 100%;
-  min-height: 52px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  background: rgba(140, 29, 64, var(--heat, 0.08));
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  font: inherit;
-}
-
-.qcell .qlabel {
-  font-size: 0.75rem;
-  color: #333;
-}
-
-.qcell .qcount {
+.qsheet thead th {
+  background: #f3f3f3;
   font-weight: 700;
 }
 
-.qcell.on {
-  border-color: #8c1d40;
-  box-shadow: inset 0 0 0 2px #8c1d40;
+.qday {
+  border-bottom: 0;
 }
 
-.qcell.best:not(.on) {
-  outline: 2px dashed #c9a227;
+.qhour {
+  font-weight: 600;
+  color: #444;
+}
+
+.qsticky {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #fff;
+  text-align: left;
+  min-width: 120px;
+  box-shadow: 2px 0 0 #ddd;
+}
+
+.qsheet thead .qsticky,
+.qsheet tfoot .qsticky {
+  background: #f3f3f3;
+  z-index: 3;
+}
+
+.qsheet tbody tr:nth-child(even) .qsticky,
+.qsheet tbody tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+.qsheet tbody tr:nth-child(even) .qsticky {
+  background: #fafafa;
+}
+
+.qsheet input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: #8c1d40;
+  cursor: pointer;
+}
+
+.qdel-btn {
+  font-size: 11px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.qsheet tfoot td,
+.qsheet tfoot th {
+  font-weight: 700;
+  background: #f3f3f3;
+}
+
+.quiet-add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 480px;
+  margin: 8px 0;
+}
+
+.quiet-add input {
+  flex: 1;
+  min-width: 180px;
+  font-size: 16px;
+  padding: 10px 12px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+}
+
+#quiet-add {
+  background: #8c1d40;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .quiet-actions {
@@ -736,17 +766,6 @@ body.quiet-mode {
   gap: 12px;
   align-items: center;
   margin-top: 12px;
-}
-
-#quiet-save {
-  background: #8c1d40;
-  color: #fff;
-  border: 0;
-  border-radius: 8px;
-  padding: 12px 18px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 #quiet-cursed {
