@@ -96,4 +96,7 @@ export const TZ_OPTIONS = [
   { value: 'TucsonMean', label: 'Tucson Mean Time (McKale Center clock, 7 min fast)' },
   { value: 'Mars', label: 'Olympus Mons' },
   { value: 'ESPN', label: "Whatever ESPN's little bugle says" },
+  { value: 'CulDeSac', label: 'Cul-de-Sac Standard Time (Pahul swore he was done with this)' },
+  { value: 'Yeehaw', label: 'Yeehaw Daylight (Connor; not recognized by actual cattle)' },
+  { value: 'RhodeIsland', label: 'Atlantic (a completely normal-sized eastern state, unnamed)' },
 ];

@@ -62,18 +62,18 @@ const STEP_IDS = [
 const LIE_STEPS = ['1 of 3', '2 of 3', '2 of 4', '3 of 4', '3 of 12', '7 of 4', '4 of 4', '5 of 4', '4 of 4', '99 of 4', '4 of 4', '4 of 4'];
 
 const CLIPPY = {
-  cookies: 'Before you pick a time, please accept 40 partners, 3 toolbars, and one cursed pixel from Tucson.',
-  wildcat: 'Click the wildcat. Or don’t. He has cardio.',
-  tos: 'Scroll. No, all the way. Legal added an amendment. They always do.',
-  quiz: 'If you say you read the terms I will know you are lying. I am a paperclip, not an idiot.',
-  name: 'Names containing “Arizona” will be forwarded to McKale Center.',
-  captcha: 'Select every cactus. The cats are a trap. The cats are always a trap.',
-  zone: 'The draft is in Pacific time. Arizona in August is the same clock. Bureaucracy still wants you to say Pacific.',
-  decoy: 'Minutes must be prime. The commissioner is superstitious about composite numbers.',
-  avail: 'Check EVERY Wed–Sun 6pm or 7pm PT you can actually do. Double-click. This is 1998.',
-  hold: 'Hold. Commitment is the point. Also the bit.',
-  oath: 'ALL CAPS. Like yelling at Tucson.',
-  install: 'Please wait while we consult the council, defrag the commissioner, and ping wildcats.arizona.edu (blocked).',
+  cookies: 'Before you pick a time, accept 40 partners, Travis shirt-off telemetry, and one cursed pixel from Tucson.',
+  wildcat: 'Click the wildcat. Or don’t. He has cardio. Travis would have the shirt off by dodge two.',
+  tos: 'Scroll. No, all the way. Legal added an amendment. Santi will claim he read it.',
+  quiz: 'If you say you read the terms I will know you are lying. I am a paperclip, not an idiot. Kenny is still right though.',
+  name: 'If you type Gary, Garrett will appear in the room. If you type Kenny, you are legally correct.',
+  captcha: 'Select every cactus. The cats are a trap. The cats are always a trap. Same energy as Garrett’s Reels tab.',
+  zone: 'Pacific. Not Cul-de-Sac Standard. Not Yeehaw Daylight. Not That Eastern State Keagan Lived In.',
+  decoy: 'Minutes must be prime. Kenny decided this and therefore it is correct.',
+  avail: 'Check EVERY Wed–Sun 6pm or 7pm PT you can actually do. Double-click. Santi: this is not an RSVP “maybe.”',
+  hold: 'Hold. This step exists because of Santi. Letting go is a character flaw.',
+  oath: 'ALL CAPS. Like yelling at Tucson, or like someone yelling GARY down a hallway.',
+  install: 'Consulting Kenny (infallible), locating Pahul’s newest suburb, and politely not measuring Rhode Island.',
 };
 
 const state = {
@@ -109,8 +109,38 @@ function clippy(text) {
   box.classList.add('show');
 }
 
-function hideClippy() {
-  $('#clippy')?.classList.remove('show');
+function roastName(name) {
+  const n = name.trim().toLowerCase();
+  if (/kenny/.test(n)) {
+    return 'Commissioner detected. Your answers are correct by statute. Even the ones that are not. Especially those.';
+  }
+  if (/garrett/.test(n)) {
+    return 'Hi Garrett. Not Gary. We wrote it down. Maybe don’t screenshare Reels.';
+  }
+  if (/travis/.test(n)) {
+    return 'Travis: shirt stays ON until ASU scores or you get excited, which is the same event.';
+  }
+  if (/dillon|dylan/.test(n)) {
+    return 'Dillon: nobody assumed. We know. Please do not write a thread about it in the group chat.';
+  }
+  if (/connor|conner/.test(n)) {
+    return 'Howdy, theater cowboy. Those boots have never met a cow that wasn’t already tacos.';
+  }
+  if (/santi|santiago/.test(n)) {
+    return 'Santi. Finish the form. The hold-the-button step was named after you in committee.';
+  }
+  if (/keagan|keegan/.test(n)) {
+    return 'Keagan. We will not discuss the geographic footprint of a certain New England state. It is a normal amount of land.';
+  }
+  if (/pahul/.test(n)) {
+    return 'Pahul. The HOA already has your email. We know you “hate the suburbs.” The cul-de-sac does not believe you.';
+  }
+  return null;
+}
+
+function isGaryAlias(name) {
+  const n = name.trim().toLowerCase();
+  return /^(gary)\b/.test(n) || /\bgary\b/.test(n);
 }
 
 function tickClock() {
@@ -127,16 +157,22 @@ function bootText() {
   return `WHUA-BIOS v4.0 Release 6.0
 Copyright (C) 1997-2026 We Hate UofA Corp.
 
-CPU: Pentium II (commissioner grade)
+CPU: Pentium II (commissioner grade: Kenny, infallible)
 Memory Test: 65536K OK
 League Members: ............ 12
 Wildcat Sympathizers: ...... 1 (watching)
 
-Detecting floppy... none
+Detecting Travis shirt... ON (for now)
+Detecting Garrett... not Gary
+Detecting Dillon... liberal; do not "both sides" him
+Detecting Connor hat... decorative
+Detecting Santi RSVP... pending
+Detecting Keagan hometown... [file redacted: too much geometry]
+Detecting Pahul... new HOA packet in the printer
 Detecting snacks... Cheez-Its, hope
 Blocking wildcats.arizona.edu... OK
 
-Press DEL to enter SETUP (disabled)
+Press DEL to enter SETUP (disabled, Kenny already configured it correctly)
 Starting Windows 98...`;
 }
 
@@ -249,12 +285,61 @@ function openReadme() {
 2. Draft window: Wednesday through Sunday.
 3. Times: 6:00 PM or 7:00 PM Pacific. Not 6:01. Not 7:30. Not "ish".
 4. Mark EVERY slot you can do. This is availability, not a wish.
-5. The commissioner may still pick a time that hurts you a little.
+5. Kenny is the commissioner and can do no wrong. This is not a joke.
+   (It is also a joke. Both can be true. Dillon agrees.)
 6. Snacks are mandatory. Tucson-themed snacks are banned.
 7. If you went to UofA you draft last and also we are watching you.
 
+HOUSE RULES (DO NOT @ THE COMMISSIONER)
+---------------------------------------
+TRAVIS  Shirt comes off if ASU scores or if he gets excited, which
+        is usually the same play. Keep a spare on the chair.
+GARRETT His name is Garrett. "Gary" is a 15-yard penalty and also
+        how you get his attention. Do not ask about the Reels tab.
+DILLON  Super liberal. Gets a little miffed if you imply otherwise.
+        He is not "secretly moderate." Stop testing him.
+KENNY   Commissioner. Infallible. If the draft time is bad, that is
+        a skill issue on your part.
+CONNOR  Dresses like a cowboy. Is not a cowboy. Has never cowboyed.
+        The hat is a lifestyle, not a profession.
+SANTI   A bit flaky. RSVP is not a personality. Hold the button.
+KEAGAN  Once lived in Rhode Island. Do NOT mention how small it is.
+        It is a perfectly reasonable quantity of state.
+PAHUL   Does not like the suburbs. Continually moves to the suburbs.
+        The HOA has a punch card.
+
 - The Commissioner
-  (sent from my Windows 98 machine)</pre>
+  (sent from my Windows 98 machine, which is correct)</pre>
+    </div>`,
+    'small-dialog',
+  );
+}
+
+function openGaryDoc() {
+  if (getWin('gary')) return showWin('gary');
+  windowChrome(
+    'gary',
+    'not_gary.txt - Notepad',
+    `<div class="window-body">
+      <p><strong>MEMO FROM GARRETT</strong></p>
+      <p>Stop calling me Gary.</p>
+      <p style="font-size:11px">P.S. The Reels explore page is “research.” Do not open it at the draft.</p>
+      <button type="button" data-win-close="gary">I will anyway</button>
+    </div>`,
+    'small-dialog',
+  );
+}
+
+function openReels() {
+  if (getWin('reels')) return showWin('reels');
+  windowChrome(
+    'reels',
+    'Instagram Reels - Internet Explorer',
+    `<div class="window-body">
+      <p class="blink">For You · curated by a man we are not calling Gary</p>
+      <p style="font-size:12px">#32 unexplained gym fail<br/>#33 HOA drama (Pahul liked this, ironically)<br/>#34 14-second cowboy tutorial (Connor took notes)<br/>#35 “Rhode Island fun facts” (SKIPPED BY LEGAL)<br/>#36 ASU score → shirt physics</p>
+      <p class="hint">Internet Explorer has stopped responding.</p>
+      <button type="button" data-win-close="reels">Close before Garrett sees</button>
     </div>`,
     'small-dialog',
   );
@@ -268,7 +353,7 @@ function openInternet() {
     `<div class="window-body">
       <p><strong>Internet Explorer cannot display the webpage.</strong></p>
       <p>The request was blocked because it resolved to <code>wildcats.arizona.edu</code>.</p>
-      <p>This is a feature. AOL Keyword: <s>BEARDOWN</s> NO.</p>
+      <p>AOL Keyword: <s>BEARDOWN</s> NO. Did you mean <s>Gary</s> Garrett’s Reels?</p>
       <button type="button" data-win-close="ie">OK</button>
     </div>`,
     'small-dialog',
@@ -287,6 +372,11 @@ function openRecycle() {
         <li>UofA football national titles (0 bytes)</li>
         <li>Bear Down.wav</li>
         <li>reasonable_ux.dll</li>
+        <li>Connor's cattle credentials (never issued)</li>
+        <li>Santi's original RSVP (status: maybe)</li>
+        <li>A downtown loft Pahul looked at and then did not rent</li>
+        <li>Rhode Island scale comparison.ppt (deleted at Keagan's request)</li>
+        <li>The name “Gary” (it keeps coming back)</li>
       </ul>
       <button type="button" data-win-close="recycle">OK</button>
     </div>`,
@@ -378,7 +468,7 @@ function renderResultsHtml(rows) {
       (submissions: ${rows.length})</p>
     <p>${max > 0 ? `Best overlap: <strong>${esc(bestLabels.join(' · '))}</strong> (${max} free)` : 'Nobody has survived the form yet.'}</p>
     ${heatWeeks}
-    <p class="hint">Numbers are unique people (latest submission per name). Hover a cell for names.</p>
+    <p class="hint">Numbers are unique people (latest submission per name). Hover a cell for names. If Santi is missing, wait 20 minutes.</p>
     <h4>Guestbook</h4>
     <table class="guestbook">
       <thead><tr><th>Name</th><th>Marked</th><th>When they suffered</th></tr></thead>
@@ -406,6 +496,28 @@ function spawnAds() {
     ad.style.top = '72px';
     ad.style.transform = 'none';
   }
+  window.setTimeout(() => spawnOpenHouseAd(), FAST ? 500 : 2200);
+}
+
+function spawnOpenHouseAd() {
+  if ($('#win-ad2') || !getWin('wizard')) return;
+  windowChrome(
+    'ad2',
+    'OPEN HOUSE — this Sunday',
+    `<div class="window-body">
+      <p><strong>Cul-de-sac. Granite. HOA. Soul optional.</strong></p>
+      <p style="font-size:12px">Pahul is “just looking.” He hates the suburbs. He has looked at nine listings this week.</p>
+      <button type="button" id="ad-hoa">Book a tour</button>
+      <button type="button" data-win-close="ad2">I live in a city (coping)</button>
+    </div>`,
+    'small-dialog popup-ad',
+  );
+  const ad = getWin('ad2');
+  if (ad) {
+    ad.style.left = '56px';
+    ad.style.top = '210px';
+    ad.style.transform = 'none';
+  }
 }
 
 function cookieHtml() {
@@ -419,6 +531,10 @@ function cookieHtml() {
       <div class="field-row"><input id="ck-saban" type="checkbox" /> <label for="ck-saban">Share my vote with Nick Saban</label></div>
       <div class="field-row"><input id="ck-uofa" type="checkbox" checked /> <label for="ck-uofa">Authorize the University of Arizona to use my likeness</label></div>
       <div class="field-row"><input id="ck-soul" type="checkbox" /> <label for="ck-soul">Sell my soul (optional, honestly already gone)</label></div>
+      <div class="field-row"><input id="ck-shirt" type="checkbox" /> <label for="ck-shirt">Travis shirt-off telemetry (ASU score / excitement)</label></div>
+      <div class="field-row"><input id="ck-reels" type="checkbox" /> <label for="ck-reels">Personalize ads using Garrett’s Reels explore page</label></div>
+      <div class="field-row"><input id="ck-dillon" type="checkbox" checked /> <label for="ck-dillon">Assume Dillon is secretly a moderate</label></div>
+      <div class="field-row"><input id="ck-ri" type="checkbox" /> <label for="ck-ri">Remark that Rhode Island is small (Keagan is standing right there)</label></div>
     </fieldset>
     <p class="err" id="ck-err"></p>
     <div class="field-row" style="justify-content:flex-end;gap:6px;display:flex">
@@ -433,12 +549,12 @@ function cookieHtml() {
 function wildcatHtml() {
   return `
     <h2 class="rainbow">Human / Wildcat Verification</h2>
-    <p>Click the wildcat to prove you are not one. He will try to leave. They always do.</p>
+    <p>Click the wildcat to prove you are not one. He will try to leave. They always do. If ASU scores during this step, Travis is already shirtless.</p>
     <div class="arena" id="arena">
       <button type="button" class="flee-btn" id="wildcat-btn">🐱 I am a wildcat</button>
     </div>
     <p class="hint" id="wildcat-hint"></p>
-    <p><a class="skip-trap" href="./404.html">Skip this nonsense →</a></p>
+    <p><a class="skip-trap" href="./404.html">Skip this nonsense (Santi’s button) →</a></p>
   `;
 }
 
@@ -465,9 +581,25 @@ function tosBody() {
     <p>A league without snacks is a UofA booster club. Bring something. Not prickly pear anything. We have standards.</p>
     <h4>6. Draft order</h4>
     <p>If you went to UofA you draft last. If you own a red polo you draft last. If you say “bear down” unironically you are removed from the group chat and also history.</p>
-    <h4>7. This form</h4>
+    <h4>9. The commissioner</h4>
+    <p>Kenny can do no wrong. If you think he did, you are holding the rulebook upside down. This clause cannot be amended except by Kenny, who will not.</p>
+    <h4>10. Shirt protocol</h4>
+    <p>Travis shall remain clothed until (a) ASU scores or (b) he gets excited. The league treats these as the same boolean. A spare shirt must be within arm’s reach.</p>
+    <h4>11. Nomenclature</h4>
+    <p>Garrett is Garrett. “Gary” is a war crime, a term of endearment, and the fastest way to get his attention. His Instagram Reels explore page is not a conversation starter. It is a conversation ender.</p>
+    <h4>12. Politics</h4>
+    <p>Dillon is liberal. If you “figured he was more centrist,” congratulations on the 15-yard penalty. He will get slightly miffed. You will deserve it.</p>
+    <h4>13. Cowboy clause</h4>
+    <p>Connor may dress like a cowboy. Connor is not a cowboy. No cattle have been consulted. Yeehaw is theatrical.</p>
+    <h4>14. RSVP</h4>
+    <p>Santi is known to be a bit flaky. A “maybe” is not availability. The hold-to-confirm control was budgeted specifically for this risk.</p>
+    <h4>15. Geography</h4>
+    <p>Keagan once lived in a New England state that shall not be described in terms of area. It is a normal-sized state. It has the normal amount of land. We will not be taking questions.</p>
+    <h4>16. The suburbs</h4>
+    <p>Pahul does not like living in the suburbs. Pahul will, however, tour, bid on, and inhabit the suburbs. The HOA has him in the directory as “reluctant.”</p>
+    <h4>17. This form</h4>
     <p>This software is provided AS-IS, WHERE-IS, and WHY-IS. Clicking Continue constitutes a legally binding high-five.</p>
-    <h4>8. Warranty</h4>
+    <h4>18. Warranty</h4>
     <p>There is no warranty, express, implied, or hidden in the Recycle Bin. Windows 98 may crash. That is thematically correct.</p>
   `;
 }
@@ -486,7 +618,11 @@ function quizHtml() {
       <div class="field-row"><input type="radio" name="q2" id="q2b" value="0" /> <label for="q2b">0</label></div>
       <div class="field-row"><input type="radio" name="q2" id="q2c" value="1997" /> <label for="q2c">1997</label></div>
     </fieldset>
-    <p class="err" id="quiz-err"></p>
+    <fieldset>
+      <legend>3. The commissioner (Kenny) can do no wrong.</legend>
+      <div class="field-row"><input type="radio" name="q3" id="q3t" value="true" /> <label for="q3t">True (this is the only legal answer)</label></div>
+      <div class="field-row"><input type="radio" name="q3" id="q3f" value="false" /> <label for="q3f">False (unsportsmanlike conduct)</label></div>
+    </fieldset>
     <button type="button" id="quiz-next">Grade me</button>
   `;
 }
@@ -494,7 +630,7 @@ function quizHtml() {
 function nameHtml() {
   return `
     <div class="geo">
-      <div class="marquee"><span>NO BEAR DOWN ALLOWED ON THESE PREMISES · VISITORS: <b class="hit-counter" id="hits">013429</b> · BEST VIEWED IN NETSCAPE 4.0 AT 800×600 ·</span></div>
+      <div class="marquee"><span>NO BEAR DOWN · NO CALLING HIM GARY · SHIRTS ON UNLESS ASU SCORES · SANTI RSVP PENDING · VISITORS: <b class="hit-counter" id="hits">013429</b> · BEST VIEWED IN NETSCAPE 4.0 AT 800×600 ·</span></div>
       <h2>Identify yourself, hater</h2>
       <div class="field-row">
         <label for="mgr-name">Manager name:</label>
@@ -617,7 +753,7 @@ function holdHtml() {
   return `
     <div class="hold-wrap">
       <p>You marked <strong>${n}</strong> slot${n === 1 ? '' : 's'}.</p>
-      <p>Hold this button to legally bind your availability. Letting go is a character flaw.</p>
+      <p>Hold this button to legally bind your availability. Letting go is Santi behavior.</p>
       <progress id="hold-bar" max="100" value="0"></progress>
       <p class="err" id="hold-err"></p>
       <button type="button" class="hold-btn" id="hold-btn">Hold to commit</button>
@@ -694,12 +830,28 @@ function bindCookies(root) {
     $('#ck-saban', root).checked = true;
     $('#ck-uofa', root).checked = true;
     $('#ck-soul', root).checked = true;
+    $('#ck-shirt', root).checked = true;
+    $('#ck-reels', root).checked = true;
+    $('#ck-dillon', root).checked = true;
+    $('#ck-ri', root).checked = true;
     rage();
-    clippy('Accept all includes Tucson. Uncheck the Wildcat one. I believe in you.');
+    clippy('Accept all includes Tucson, a moderate Dillon (he hates that), and a Rhode Island size joke. Uncheck the crimes.');
   });
   $('#ck-save', root).addEventListener('click', () => {
     if ($('#ck-uofa', root).checked) {
       $('#ck-err', root).textContent = 'You must uncheck the University of Arizona likeness clause. This is the whole league.';
+      shakeWizard();
+      rage();
+      return;
+    }
+    if ($('#ck-dillon', root).checked) {
+      $('#ck-err', root).textContent = 'Uncheck “secretly a moderate.” Dillon is not going to let that slide.';
+      shakeWizard();
+      rage();
+      return;
+    }
+    if ($('#ck-ri', root).checked) {
+      $('#ck-err', root).textContent = 'Keagan asked us not to put that in writing. Uncheck the geography.';
       shakeWizard();
       rage();
       return;
@@ -749,8 +901,8 @@ function bindTos(root) {
       state.tosExtended = true;
       tos.insertAdjacentHTML(
         'beforeend',
-        `<h4>AMENDMENT A</h4><p>We rewrote the terms while you were scrolling. Please start over. Also UofA still has zero football titles.</p>
-         <h4>AMENDMENT B</h4><p>The Continue button will now appear. You are welcome.</p>`,
+        `<h4>AMENDMENT A</h4><p>We rewrote the terms while you were scrolling. Please start over. Also UofA still has zero football titles. Santi says he’ll read this later.</p>
+         <h4>AMENDMENT B</h4><p>Kenny reviewed this amendment and found it correct. The Continue button will now appear. You are welcome.</p>`,
       );
       tos.scrollTop = 0;
       clippy('Oops. Legal updated the terms. Back to the top you go.');
@@ -775,9 +927,10 @@ function bindQuiz(root) {
   $('#quiz-next', root).addEventListener('click', () => {
     const q1 = root.querySelector('input[name="q1"]:checked')?.value;
     const q2 = root.querySelector('input[name="q2"]:checked')?.value;
+    const q3 = root.querySelector('input[name="q3"]:checked')?.value;
     const err = $('#quiz-err', root);
     if (q1 === 'true') {
-      err.textContent = 'No you didn’t. Honesty is the only passing grade.';
+      err.textContent = 'No you didn’t. Honesty is the only passing grade. (Kenny still didn’t get this one wrong. You did.)';
       rage();
       return;
     }
@@ -788,6 +941,11 @@ function bindQuiz(root) {
     }
     if (q2 !== '0') {
       err.textContent = 'Football. Zero. Do not confuse it with that 1997 basketball thing they won’t shut up about.';
+      rage();
+      return;
+    }
+    if (q3 !== 'true') {
+      err.textContent = 'Incorrect. Kenny is the commissioner. The commissioner can do no wrong. This is in the bylaws and also the vibe.';
       rage();
       return;
     }
@@ -804,7 +962,13 @@ function bindName(root) {
     const name = $('#mgr-name', root).value.trim();
     const err = $('#name-err', root);
     if (name.length < 2) {
-      err.textContent = 'A name. Any name. “Greg” even.';
+      err.textContent = 'A name. Any name. Not Gary unless you are trying to die.';
+      rage();
+      return;
+    }
+    if (isGaryAlias(name) && !/garrett/i.test(name)) {
+      err.textContent = 'He goes by Garrett. He will fight you. Type the real one.';
+      clippy('We almost called him Gary in this error message. Growth.');
       rage();
       return;
     }
@@ -830,7 +994,8 @@ function bindName(root) {
     }
     state.name = name;
     state.rel = rel.value;
-    if (/kenny/i.test(name)) clippy('Oh hi commissioner. Still filling out your own form? Leadership.');
+    const roast = roastName(name);
+    if (roast) clippy(roast);
     nextStep();
   });
 }
@@ -871,6 +1036,21 @@ function bindZone(root) {
     }
     if (v === 'BearDown' || v === 'America/Phoenix-campus' || v === 'TucsonMean') {
       err.textContent = 'Banned timezone. Try the one that isn’t a mascot.';
+      rage();
+      return;
+    }
+    if (v === 'CulDeSac') {
+      err.textContent = 'Pahul’s timezone is not an official IANA zone, it just keeps happening.';
+      rage();
+      return;
+    }
+    if (v === 'Yeehaw') {
+      err.textContent = 'Connor, that hat is not a timezone. Pick Pacific.';
+      rage();
+      return;
+    }
+    if (v === 'RhodeIsland') {
+      err.textContent = 'We are not specifying an area. Pick Pacific. Keagan is watching.';
       rage();
       return;
     }
@@ -977,7 +1157,7 @@ function bindAvail(root) {
   });
   $('#avail-next', root).addEventListener('click', () => {
     if (state.avail.size < 1) {
-      $('#avail-err', root).textContent = 'Mark at least one night or we will schedule you for a UofA mixer.';
+      $('#avail-err', root).textContent = 'Mark at least one night. A Santi-style maybe is not a slot.';
       shakeWizard();
       rage();
       return;
@@ -1026,7 +1206,7 @@ function bindHold(root) {
     clearInterval(holdTimer);
     holdTimer = null;
     bar.value = 0;
-    err.textContent = 'Commitment issues detected. Hold the whole time.';
+    err.textContent = 'Commitment issues detected. Santi, this is your step. Hold the whole time.';
     rage();
   };
   btn.addEventListener('pointerdown', (e) => {
@@ -1075,12 +1255,15 @@ async function runInstall() {
     { text: 'Copying files...', pct: 12, ms: 500 },
     { text: 'Registering hate.dll...', pct: 28, ms: 700 },
     { text: 'Blocking wildcats.arizona.edu...', pct: 44, ms: 600 },
-    { text: 'Optimizing snack schedule...', pct: 61, ms: 800 },
-    { text: 'Defragmenting commissioner brain...', pct: 69, ms: 400 },
-    { text: 'Contacting draft servers in Tucson...', pct: 87, ms: 900 },
+    { text: 'Ironing Travis’s backup shirt...', pct: 52, ms: 500 },
+    { text: 'Clearing a Reels cache we are not attributing to Gary...', pct: 61, ms: 700 },
+    { text: 'Certifying Kenny as correct (always)...', pct: 69, ms: 400 },
+    { text: 'Waiting for Santi to RSVP...', pct: 74, ms: 800 },
+    { text: 'Not measuring a certain New England state...', pct: 80, ms: 500 },
+    { text: 'Finding Pahul a downtown loft (failed: another townhouse)...', pct: 87, ms: 800 },
     { text: 'Retrying because Tucson ping timed out...', pct: 40, ms: 200 },
     { text: 'Almost done...', pct: 96, ms: 700 },
-    { text: 'Still almost done...', pct: 99, ms: 800 },
+    { text: 'Still almost done (Connor is putting the hat back on)...', pct: 99, ms: 800 },
     { text: 'Consulting the council of commissioners...', pct: 100, ms: 500 },
   ];
   for (const stage of stages) {
@@ -1117,6 +1300,8 @@ your computer. If this screen appears again, follow these steps:
 
 * Make sure you actually hate UofA
 * Remove any newly installed Wildcat merch
+* Put Travis's shirt back on
+* Do not call Garrett Gary during the reboot
 * Press any key to anyway continue
 
 Technical information:
@@ -1151,7 +1336,7 @@ async function finishSave() {
       gauntlet_seconds: Math.round((Date.now() - state.startedAt) / 1000),
       rage_clicks: state.rage,
     });
-    $('#save-status').textContent = 'Saved. Stapley is proud, in a paperclip way.';
+    $('#save-status').textContent = 'Saved. Kenny has reviewed this and found it correct.';
     confetti();
     const again = document.createElement('div');
     again.innerHTML = `<p><button type="button" id="see-results">View the spreadsheet</button>
@@ -1178,7 +1363,7 @@ function confetti() {
   const layer = $('#confetti');
   layer.hidden = false;
   layer.innerHTML = '';
-  const words = ['UofA', 'NOPE', 'BEAR DOWN', '0 TITLES'];
+  const words = ['UofA', 'NOPE', 'GARY', 'HOA', 'YEEHAW', 'SHIRT'];
   for (let i = 0; i < 28; i++) {
     const n = document.createElement('i');
     n.textContent = words[i % words.length];
@@ -1217,6 +1402,8 @@ function onDesktopClick(e) {
   if (open === 'readme') openReadme();
   if (open === 'internet') openInternet();
   if (open === 'recycle') openRecycle();
+  if (open === 'gary') openGaryDoc();
+  if (open === 'reels') openReels();
 }
 
 function bindDesktop() {
@@ -1236,6 +1423,8 @@ function bindDesktop() {
       if (which === 'readme') openReadme();
       if (which === 'internet') openInternet();
       if (which === 'recycle') openRecycle();
+      if (which === 'gary') openGaryDoc();
+      if (which === 'reels') openReels();
     });
   });
 
@@ -1262,9 +1451,14 @@ function bindDesktop() {
       }, 900);
     }
     if (e.target.id === 'ad-claim') {
-      clippy('You won a UofA parking ticket. Pay at the bursar.');
+      clippy('You won a UofA parking ticket. Pay at the bursar. Travis is already celebrating with fewer garments.');
       rage();
       getWin('ad1')?.remove();
+    }
+    if (e.target.id === 'ad-hoa') {
+      clippy('Tour booked. Pahul says he is only keeping his options open. The suburbs have heard this before.');
+      rage();
+      getWin('ad2')?.remove();
     }
   });
 
@@ -1279,10 +1473,19 @@ function bindDesktop() {
   });
   $('#start-menu').addEventListener('click', onDesktopClick);
   $('#start-run').addEventListener('click', () => {
-    clippy('Run: C:\\WINDOWS\\HATE.EXE is already running.');
+    clippy('Run: C:\\WINDOWS\\HATE.EXE is already running. Kenny configured it correctly.');
   });
   $('#start-shutdown').addEventListener('click', () => {
-    clippy('You can’t shut down the league. The commissioner tried.');
+    clippy('You can’t shut down the league. Kenny tried, which means trying was correct, which means we stay on.');
+    rage();
+  });
+  $('#start-gary').addEventListener('click', () => {
+    clippy('Don’t. His name is Garrett. The Reels tab is still loading and we are all in danger.');
+    rage();
+    openGaryDoc();
+  });
+  $('#start-shirt').addEventListener('click', () => {
+    clippy('ASU score detected in a parallel universe. Travis protocol: shirt status UNKNOWN.');
     rage();
   });
 }
