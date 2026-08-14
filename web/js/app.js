@@ -73,7 +73,7 @@ const CLIPPY = {
   avail: 'Check EVERY Wed–Sun 6pm or 7pm PT you can actually do. Double-click. Santi: this is not an RSVP “maybe.”',
   hold: 'Hold. This step exists because of Santi. Letting go is a character flaw.',
   oath: 'ALL CAPS. Like yelling at Tucson, or like someone yelling GARY down a hallway.',
-  install: 'Consulting Kenny (infallible), locating Pahul’s newest suburb, and politely not measuring Rhode Island.',
+  install: 'Consulting Kenny (infallible), locating Pahul at Hayden (not the books), and buffering Czyz’s Raaaaiders intro.',
 };
 
 const state = {
@@ -133,7 +133,13 @@ function roastName(name) {
     return 'Keagan. We will not discuss the geographic footprint of a certain New England state. It is a normal amount of land.';
   }
   if (/pahul/.test(n)) {
-    return 'Pahul. The HOA already has your email. We know you “hate the suburbs.” The cul-de-sac does not believe you.';
+    return 'Pahul. The HOA has your email, and Hayden Library still has your browsing history. “Studying” is a generous word.';
+  }
+  if (/sean/.test(n)) {
+    return 'Sean. Please disclose which Denver degenerates you are bringing. “They’re actually really solid dudes” is not a disclosure.';
+  }
+  if (/czyz/.test(n)) {
+    return 'Czyz. The Raiders left Oakland. You did not. We have notes. A lot of A’s.';
   }
   return null;
 }
@@ -168,7 +174,9 @@ Detecting Dillon... liberal; do not "both sides" him
 Detecting Connor hat... decorative
 Detecting Santi RSVP... pending
 Detecting Keagan hometown... [file redacted: too much geometry]
-Detecting Pahul... new HOA packet in the printer
+Detecting Pahul... new HOA packet; Hayden Library pickup logs corrupted
+Detecting Sean... last seen with Denver degenerates (his words: "they're fine")
+Detecting Czyz... Oakland Raaaaiders still in the registry
 Detecting snacks... Cheez-Its, hope
 Blocking wildcats.arizona.edu... OK
 
@@ -296,6 +304,8 @@ TRAVIS  Shirt comes off if ASU scores or if he gets excited, which
         is usually the same play. Keep a spare on the chair.
 GARRETT His name is Garrett. "Gary" is a 15-yard penalty and also
         how you get his attention. Do not ask about the Reels tab.
+        (If you do: there may be bikinis. There may also be famous
+        Republican women. We are not reconciling those two facts.)
 DILLON  Super liberal. Gets a little miffed if you imply otherwise.
         He is not "secretly moderate." Stop testing him.
 KENNY   Commissioner. Infallible. If the draft time is bad, that is
@@ -306,7 +316,13 @@ SANTI   A bit flaky. RSVP is not a personality. Hold the button.
 KEAGAN  Once lived in Rhode Island. Do NOT mention how small it is.
         It is a perfectly reasonable quantity of state.
 PAHUL   Does not like the suburbs. Continually moves to the suburbs.
-        The HOA has a punch card.
+        The HOA has a punch card. Used Hayden Library primarily as
+        a pickup spot. The books were a prop.
+SEAN    Hangs out with "real degenerates" (dudes from Denver). He
+        says this with affection. The degenerates say it with pride.
+CZYZ    Questionable, loud, and ongoing love of the Oakland
+        Raaaaiders. The team moved. His loyalty did not. The extra
+        A's are load-bearing.
 
 - The Commissioner
   (sent from my Windows 98 machine, which is correct)</pre>
@@ -323,7 +339,7 @@ function openGaryDoc() {
     `<div class="window-body">
       <p><strong>MEMO FROM GARRETT</strong></p>
       <p>Stop calling me Gary.</p>
-      <p style="font-size:11px">P.S. The Reels explore page is “research.” Do not open it at the draft.</p>
+      <p style="font-size:11px">P.S. The Reels explore page is “research.” If a bikini or a famous Republican woman autoplays, that is the algorithm, allegedly. Do not open it at the draft.</p>
       <button type="button" data-win-close="gary">I will anyway</button>
     </div>`,
     'small-dialog',
@@ -337,12 +353,13 @@ function openReels() {
     'Instagram Reels - Internet Explorer',
     `<div class="window-body">
       <p class="blink">For You · curated by a man we are not calling Gary</p>
-      <p style="font-size:12px">#32 unexplained gym fail<br/>#33 HOA drama (Pahul liked this, ironically)<br/>#34 14-second cowboy tutorial (Connor took notes)<br/>#35 “Rhode Island fun facts” (SKIPPED BY LEGAL)<br/>#36 ASU score → shirt physics</p>
-      <p class="hint">Internet Explorer has stopped responding.</p>
+      <p style="font-size:12px">#32 unexplained gym fail<br/>#33 HOA drama (Pahul liked this, ironically)<br/>#34 14-second cowboy tutorial (Connor took notes)<br/>#35 “Rhode Island fun facts” (SKIPPED BY LEGAL)<br/>#36 ASU score → shirt physics<br/>#37 beach / pool “fitness” content (there may be bikinis; we are not opening comments)<br/>#38 famous Republican women, an amount that raises questions<br/>#39 Hayden Library study-vlog (Pahul is not in the stacks)<br/>#40 Denver degenerates night out (Sean tagged, allegedly ironically)<br/>#41 Oakland Raaaaiders hype (Czyz; the extra A’s are contractual)</p>
+      <p class="hint">Internet Explorer has stopped responding. The algorithm has not.</p>
       <button type="button" data-win-close="reels">Close before Garrett sees</button>
     </div>`,
     'small-dialog',
   );
+  clippy('Just so we are clear: bikinis may appear. Famous Republican women may appear. We are not drawing a Venn diagram.');
 }
 
 function openInternet() {
@@ -375,8 +392,11 @@ function openRecycle() {
         <li>Connor's cattle credentials (never issued)</li>
         <li>Santi's original RSVP (status: maybe)</li>
         <li>A downtown loft Pahul looked at and then did not rent</li>
+        <li>Hayden Library “study group” flyers (Pahul; no books were harmed)</li>
         <li>Rhode Island scale comparison.ppt (deleted at Keagan's request)</li>
         <li>The name “Gary” (it keeps coming back)</li>
+        <li>Sean’s “they’re not that degenerate” affidavit (from Denver)</li>
+        <li>Las Vegas Raiders rebrand kit (Czyz refused delivery)</li>
       </ul>
       <button type="button" data-win-close="recycle">OK</button>
     </div>`,
@@ -506,7 +526,7 @@ function spawnOpenHouseAd() {
     'OPEN HOUSE — this Sunday',
     `<div class="window-body">
       <p><strong>Cul-de-sac. Granite. HOA. Soul optional.</strong></p>
-      <p style="font-size:12px">Pahul is “just looking.” He hates the suburbs. He has looked at nine listings this week.</p>
+      <p style="font-size:12px">Pahul is “just looking.” He hates the suburbs. He has looked at nine listings this week. Hayden Library called; they said the pickup artist era is over and also please return the books he never checked out.</p>
       <button type="button" id="ad-hoa">Book a tour</button>
       <button type="button" data-win-close="ad2">I live in a city (coping)</button>
     </div>`,
@@ -532,7 +552,7 @@ function cookieHtml() {
       <div class="field-row"><input id="ck-uofa" type="checkbox" checked /> <label for="ck-uofa">Authorize the University of Arizona to use my likeness</label></div>
       <div class="field-row"><input id="ck-soul" type="checkbox" /> <label for="ck-soul">Sell my soul (optional, honestly already gone)</label></div>
       <div class="field-row"><input id="ck-shirt" type="checkbox" /> <label for="ck-shirt">Travis shirt-off telemetry (ASU score / excitement)</label></div>
-      <div class="field-row"><input id="ck-reels" type="checkbox" /> <label for="ck-reels">Personalize ads using Garrett’s Reels explore page</label></div>
+      <div class="field-row"><input id="ck-reels" type="checkbox" /> <label for="ck-reels">Personalize ads using Garrett’s Reels (bikinis / famous Republican women / “research”)</label></div>
       <div class="field-row"><input id="ck-dillon" type="checkbox" checked /> <label for="ck-dillon">Assume Dillon is secretly a moderate</label></div>
       <div class="field-row"><input id="ck-ri" type="checkbox" /> <label for="ck-ri">Remark that Rhode Island is small (Keagan is standing right there)</label></div>
     </fieldset>
@@ -586,7 +606,7 @@ function tosBody() {
     <h4>10. Shirt protocol</h4>
     <p>Travis shall remain clothed until (a) ASU scores or (b) he gets excited. The league treats these as the same boolean. A spare shirt must be within arm’s reach.</p>
     <h4>11. Nomenclature</h4>
-    <p>Garrett is Garrett. “Gary” is a war crime, a term of endearment, and the fastest way to get his attention. His Instagram Reels explore page is not a conversation starter. It is a conversation ender.</p>
+    <p>Garrett is Garrett. “Gary” is a war crime, a term of endearment, and the fastest way to get his attention. His Instagram Reels explore page is not a conversation starter. It is a conversation ender. Independent monitors report possible bikini content and, separately, a statistically confusing number of famous Republican women. No further questions at this time.</p>
     <h4>12. Politics</h4>
     <p>Dillon is liberal. If you “figured he was more centrist,” congratulations on the 15-yard penalty. He will get slightly miffed. You will deserve it.</p>
     <h4>13. Cowboy clause</h4>
@@ -596,10 +616,14 @@ function tosBody() {
     <h4>15. Geography</h4>
     <p>Keagan once lived in a New England state that shall not be described in terms of area. It is a normal-sized state. It has the normal amount of land. We will not be taking questions.</p>
     <h4>16. The suburbs</h4>
-    <p>Pahul does not like living in the suburbs. Pahul will, however, tour, bid on, and inhabit the suburbs. The HOA has him in the directory as “reluctant.”</p>
-    <h4>17. This form</h4>
+    <p>Pahul does not like living in the suburbs. Pahul will, however, tour, bid on, and inhabit the suburbs. The HOA has him in the directory as “reluctant.” Historical note: his primary use of Hayden Library was not the stacks. It was the pickup game. The books were camouflage.</p>
+    <h4>17. Denver degenerates</h4>
+    <p>Sean is known to hang out with “real degenerates,” specifically dudes from Denver. He says this like a warning and a resume line. If a stranger in a Broncos hat appears at the draft, that is a feature.</p>
+    <h4>18. Commitment to a franchise that left</h4>
+    <p>Czyz maintains a questionable love of the Oakland Raaaaiders. The extra A’s are load-bearing. Please do not mention Las Vegas unless you want a TED Talk.</p>
+    <h4>19. This form</h4>
     <p>This software is provided AS-IS, WHERE-IS, and WHY-IS. Clicking Continue constitutes a legally binding high-five.</p>
-    <h4>18. Warranty</h4>
+    <h4>20. Warranty</h4>
     <p>There is no warranty, express, implied, or hidden in the Recycle Bin. Windows 98 may crash. That is thematically correct.</p>
   `;
 }
@@ -1054,6 +1078,11 @@ function bindZone(root) {
       rage();
       return;
     }
+    if (v === 'Oakland') {
+      err.textContent = 'Czyz, the draft is not in the Black Hole. Pacific. The extra A’s will not help you here.';
+      rage();
+      return;
+    }
     if (!v) {
       err.textContent = 'Pick something. Time is a social construct but also 7:00 PM.';
       rage();
@@ -1260,7 +1289,10 @@ async function runInstall() {
     { text: 'Certifying Kenny as correct (always)...', pct: 69, ms: 400 },
     { text: 'Waiting for Santi to RSVP...', pct: 74, ms: 800 },
     { text: 'Not measuring a certain New England state...', pct: 80, ms: 500 },
-    { text: 'Finding Pahul a downtown loft (failed: another townhouse)...', pct: 87, ms: 800 },
+    { text: 'Finding Pahul a downtown loft (failed: another townhouse)...', pct: 84, ms: 600 },
+    { text: 'Checking Hayden Library for Pahul (he is not studying)...', pct: 87, ms: 500 },
+    { text: 'Vetting Sean’s Denver degenerates...', pct: 90, ms: 500 },
+    { text: 'Installing Oakland Raaaaiders codec (Czyz)...', pct: 93, ms: 500 },
     { text: 'Retrying because Tucson ping timed out...', pct: 40, ms: 200 },
     { text: 'Almost done...', pct: 96, ms: 700 },
     { text: 'Still almost done (Connor is putting the hat back on)...', pct: 99, ms: 800 },
@@ -1363,7 +1395,7 @@ function confetti() {
   const layer = $('#confetti');
   layer.hidden = false;
   layer.innerHTML = '';
-  const words = ['UofA', 'NOPE', 'GARY', 'HOA', 'YEEHAW', 'SHIRT'];
+  const words = ['UofA', 'NOPE', 'GARY', 'HOA', 'YEEHAW', 'SHIRT', 'RAIDERS'];
   for (let i = 0; i < 28; i++) {
     const n = document.createElement('i');
     n.textContent = words[i % words.length];
@@ -1480,12 +1512,16 @@ function bindDesktop() {
     rage();
   });
   $('#start-gary').addEventListener('click', () => {
-    clippy('Don’t. His name is Garrett. The Reels tab is still loading and we are all in danger.');
+    clippy('Don’t. His name is Garrett. The Reels tab may contain bikinis and/or famous Republican women. We are all in danger.');
     rage();
     openGaryDoc();
   });
   $('#start-shirt').addEventListener('click', () => {
     clippy('ASU score detected in a parallel universe. Travis protocol: shirt status UNKNOWN.');
+    rage();
+  });
+  $('#start-raiders').addEventListener('click', () => {
+    clippy('Czyz has entered the chat. It is still the Oakland Raaaaiders. Las Vegas is a rumor started by cowards.');
     rage();
   });
 }

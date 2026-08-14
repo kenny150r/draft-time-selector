@@ -88,7 +88,7 @@ export const TZ_OPTIONS = [
   { value: 'UTC', label: 'UTC (for cowards)' },
   { value: 'America/New_York', label: 'Eastern' },
   { value: 'America/Chicago', label: 'Central' },
-  { value: 'America/Denver', label: 'Mountain (the DST kind, Colorado-brained)' },
+  { value: 'America/Denver', label: 'Mountain (the DST kind, Colorado-brained, Sean’s Denver degenerates)' },
   { value: 'America/Phoenix', label: 'Arizona (no DST — almost right, still wrong)' },
   { value: 'America/Los_Angeles', label: 'Pacific (the commissioner’s timezone)' },
   { value: 'America/Phoenix-campus', label: 'America/Phoenix (UofA campus — BANNED)' },
@@ -99,4 +99,5 @@ export const TZ_OPTIONS = [
   { value: 'CulDeSac', label: 'Cul-de-Sac Standard Time (Pahul swore he was done with this)' },
   { value: 'Yeehaw', label: 'Yeehaw Daylight (Connor; not recognized by actual cattle)' },
   { value: 'RhodeIsland', label: 'Atlantic (a completely normal-sized eastern state, unnamed)' },
+  { value: 'Oakland', label: 'Oakland Raaaaiders Time (Czyz; Las Vegas is a conspiracy)' },
 ];
