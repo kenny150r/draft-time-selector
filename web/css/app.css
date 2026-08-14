@@ -713,9 +713,25 @@ body.quiet-mode {
   background: #fafafa;
 }
 
+.qbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  cursor: pointer;
+}
+
 .qsheet input[type='checkbox'] {
+  appearance: auto;
+  -webkit-appearance: checkbox;
+  -moz-appearance: checkbox;
+  opacity: 1 !important;
+  position: static !important;
   width: 18px;
   height: 18px;
+  margin: 0;
+  background: none;
+  border: initial;
   accent-color: #8c1d40;
   cursor: pointer;
 }

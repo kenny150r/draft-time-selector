@@ -164,7 +164,7 @@ function personRow(row) {
   const have = new Set((row.available_slot_ids || []).filter((id) => SLOT_IDS.has(id)));
   const boxes = SLOTS.map(
     (s) =>
-      `<td><input type="checkbox" data-slot="${s.id}" ${have.has(s.id) ? 'checked' : ''} aria-label="${esc(`${row.display_name} ${s.label}`)}" /></td>`,
+      `<td><label class="qbox"><input type="checkbox" data-slot="${s.id}" ${have.has(s.id) ? 'checked' : ''} aria-label="${esc(`${row.display_name} ${s.label}`)}" /></label></td>`,
   ).join('');
   return `<tr data-id="${esc(row.id)}">
     <th class="qsticky qname" scope="row">${esc(row.display_name)}</th>
