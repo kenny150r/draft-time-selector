@@ -14,7 +14,8 @@ import {
   WEEKS,
   isPrime,
 } from './config.js';
-import { fetchResponses, saveResponse } from './db.js';
+import { fetchResponses, saveResponse, tally } from './db.js';
+import { showQuietBoard, wantsActualBoard } from './board.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -425,27 +426,8 @@ async function openResults() {
   }
 }
 
-function latestByName(rows) {
-  const map = new Map();
-  for (const row of rows) {
-    map.set(String(row.display_name).trim().toLowerCase(), row);
-  }
-  return [...map.values()];
-}
-
 function renderResultsHtml(rows) {
-  const latest = latestByName(rows);
-  const counts = Object.fromEntries(SLOTS.map((s) => [s.id, 0]));
-  const namesBySlot = Object.fromEntries(SLOTS.map((s) => [s.id, []]));
-  for (const row of latest) {
-    for (const id of row.available_slot_ids || []) {
-      if (counts[id] == null) continue;
-      counts[id] += 1;
-      namesBySlot[id].push(row.display_name);
-    }
-  }
-  const max = Math.max(0, ...Object.values(counts));
-  const bestIds = new Set(SLOTS.filter((s) => counts[s.id] === max && max > 0).map((s) => s.id));
+  const { latest, counts, namesBySlot, max, bestIds, bestLabels } = tally(rows);
 
   const heatWeeks = WEEKS.map((week) => {
     const rowsHtml = week.days
@@ -471,7 +453,6 @@ function renderResultsHtml(rows) {
     </table>`;
   }).join('');
 
-  const bestLabels = SLOTS.filter((s) => bestIds.has(s.id)).map((s) => s.label);
   const guest = [...rows].reverse()
     .map(
       (r) => `<tr>
@@ -1524,9 +1505,30 @@ function bindDesktop() {
     clippy('Czyz has entered the chat. It is still the Oakland Raaaaiders. Las Vegas is a rumor started by cowards.');
     rage();
   });
+
+  let clockTaps = 0;
+  let clockReset = 0;
+  $('#clock').addEventListener('click', () => {
+    clockTaps += 1;
+    window.clearTimeout(clockReset);
+    clockReset = window.setTimeout(() => {
+      clockTaps = 0;
+    }, 4500);
+    if (clockTaps >= 8) {
+      clockTaps = 0;
+      location.hash = 'actual';
+    }
+  });
 }
 
 async function startBoot() {
+  window.addEventListener('hashchange', () => {
+    if (wantsActualBoard()) showQuietBoard();
+  });
+  if (wantsActualBoard()) {
+    showQuietBoard();
+    return;
+  }
   const boot = $('#boot');
   const full = bootText();
   if (FAST) {

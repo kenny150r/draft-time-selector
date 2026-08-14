@@ -610,6 +610,150 @@ progress {
   float: right;
 }
 
+html:has(body.quiet-mode),
+body.quiet-mode {
+  overflow: auto;
+  height: auto;
+  background: #f6f3ec;
+}
+
+#quiet {
+  position: relative;
+  z-index: 190;
+  min-height: 100%;
+  padding: 24px 16px 48px;
+  max-width: 720px;
+  margin: 0 auto;
+  color: #1a1a1a;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  user-select: text;
+}
+
+.quiet-head h1 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+}
+
+.quiet-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  color: #8c1d40;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.quiet-name {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  margin: 16px 0;
+}
+
+.quiet-name input {
+  font-size: 16px;
+  padding: 10px 12px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+}
+
+.quiet-note {
+  font-size: 0.9rem;
+  color: #444;
+  margin: 4px 0;
+}
+
+.quiet-err {
+  color: #8c1d40;
+  font-weight: 700;
+  min-height: 1.2em;
+}
+
+.qweek {
+  margin: 20px 0;
+}
+
+.qweek h2 {
+  font-size: 1rem;
+  margin: 0 0 8px;
+}
+
+.qtable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.qtable th,
+.qtable td {
+  padding: 4px;
+  text-align: center;
+}
+
+.qtable th[scope='row'] {
+  text-align: left;
+  white-space: nowrap;
+  padding-right: 10px;
+  font-size: 0.9rem;
+}
+
+.qcell {
+  width: 100%;
+  min-height: 52px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background: rgba(140, 29, 64, var(--heat, 0.08));
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font: inherit;
+}
+
+.qcell .qlabel {
+  font-size: 0.75rem;
+  color: #333;
+}
+
+.qcell .qcount {
+  font-weight: 700;
+}
+
+.qcell.on {
+  border-color: #8c1d40;
+  box-shadow: inset 0 0 0 2px #8c1d40;
+}
+
+.qcell.best:not(.on) {
+  outline: 2px dashed #c9a227;
+}
+
+.quiet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+#quiet-save {
+  background: #8c1d40;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#quiet-cursed {
+  font-size: 0.85rem;
+  color: #555;
+}
+
 @media (max-width: 640px) {
   .window.wizard,
   .window.results {

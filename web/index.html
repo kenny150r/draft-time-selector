@@ -93,6 +93,27 @@
     <div id="bsod"></div>
     <div id="confetti" class="confetti" hidden></div>
 
+    <div id="quiet" hidden>
+      <header class="quiet-head">
+        <p class="quiet-kicker">We Hate UofA · the actual form</p>
+        <h1>Draft availability</h1>
+        <p>Wednesday–Sunday · 6:00 PM or 7:00 PM Pacific. Tap every slot you can do. Latest save per name wins.</p>
+        <p id="quiet-summary"></p>
+      </header>
+      <label class="quiet-name">
+        Your name
+        <input id="quiet-name" type="text" maxlength="80" autocomplete="name" placeholder="First name is fine" />
+      </label>
+      <p id="quiet-note" class="quiet-note"></p>
+      <p id="quiet-picked" class="quiet-note">0 selected</p>
+      <div id="quiet-grid"></div>
+      <p id="quiet-err" class="quiet-err"></p>
+      <div class="quiet-actions">
+        <button type="button" id="quiet-save">Save availability</button>
+        <a href="#" id="quiet-cursed">I want the cursed Windows 98 version</a>
+      </div>
+    </div>
+
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>
